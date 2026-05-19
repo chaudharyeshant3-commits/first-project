@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>MailGuard – Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body class="dash-body">
+
+<!-- Notification Tray -->
+<div id="notif-tray"></div>
+
+<!-- Sidebar -->
+<aside class="sidebar glass">
+  <div class="sb-logo">
+    <span class="logo-icon-sm">🛡️</span>
+    <span class="logo-text-sm">MailGuard</span>
+  </div>
+  <div class="sb-user">
+    <div class="user-avatar">{{ user_email[0].upper() }}</div>
+    <div>
+      <div class="user-name">My Account</div>
+      <div class="user-email">{{ user_email }}</div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <a href="#" class="nav-item active" onclick="showSection(event, 'all')">📊 Dashboard</a>
+    <a href="#" class="nav-item" onclick="showSection(event, 'Spam')">🚫 Spam</a>
+    <a href="#" class="nav-item" onclick="showSection(event, 'Phishing')">🎣 Phishing</a>
+    <a href="#" class="nav-item" onclick="showSection(event, 'Virus / Malware')">🦠 Virus</a>
+    <a href="#" class="nav-item" onclick="showSection(event, 'Marketing')">📢 Marketing</a>
+    <a href="#" class="nav-item" onclick="showSection(event, 'Newsletter')">📰 Newsletter</a>
+    <a href="#" class="nav-item" onclick="showSection(event, 'Transaction')">📦 Transactions</a>
+    <a href="#" class="nav-item" onclick="showSection(event, 'Work')">💼 Work</a>
+    <a href="#" class="nav-item" onclick="showSection(event, 'Personal')">👤 Personal</a>
+  </nav>
+  <div class="sb-live" style="margin-bottom: 20px;">
+    <span class="live-dot"></span> Live Monitoring
+  </div>
+  <a href="/" class="btn-logout" style="color: rgb(226, 232, 240); border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); margin-top: auto; margin-bottom: 8px;">🏠 Back to Home</a>
+  <a href="/logout" class="btn-logout">🚪 Disconnect</a>
+</aside>
+
+<!-- Main -->
+<main class="main-content">
+  <!-- Header -->
+  <div class="dash-header">
+    <div>
+      <h1 class="dash-title" id="section-title">All Emails</h1>
+      <p class="dash-sub">Real-time inbox intelligence</p>
+    </div>
+    <div class="header-right">
+      <span class="total-badge">{{ total }} emails analyzed</span>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    {% set cat_data = [
+      ('Spam','🚫','red', stats.get('Spam',0)),
+      ('Phishing','🎣','orange', stats.get('Phishing',0)),
+      ('Virus / Malware','🦠','darkred', stats.get('Virus / Malware',0)),
+      ('Marketing','📢','purple', stats.get('Marketing',0)),
+      ('Newsletter','📰','blue', stats.get('Newsletter',0)),
+      ('Transaction','📦','yellow', stats.get('Transaction',0)),
+      ('Work','💼','green', stats.get('Work',0)),
+      ('Personal','👤','teal', stats.get('Personal',0)),
+    ] %}
+    {% for cat, icon, color, count in cat_data %}
+    <div class="stat-card glass cat-{{ color }}">
+      <div class="stat-icon">{{ icon }}</div>
+      <div class="stat-info">
+        <div class="stat-count">{{ count }}</div>
+        <div class="stat-label">{{ cat }}</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Charts Row -->
+  <div class="charts-row">
+    <div class="chart-card glass">
+      <h3 class="chart-title">Email Categories</h3>
+      <div class="chart-container">
+        <canvas id="categoryChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card glass">
+      <h3 class="chart-title">Risk Analysis</h3>
+      <div class="chart-container">
+        <canvas id="riskChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Email Table -->
+  <div class="table-wrap glass" id="email-table-wrap">
+    <table class="email-table" id="email-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Sender</th>
+          <th>Subject</th>
+          <th>Risk</th>
+          <th>Confidence</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody id="email-tbody">
+        {% for e in emails %}
+        <tr class="email-row cat-row-{{ e.risk_level | lower }}" data-category="{{ e.category }}"
+            data-email="{{ e.to_dict() | tojson | forceescape }}" onclick="showDetail(JSON.parse(this.dataset.email))">
+          <td><span class="cat-badge cat-{{ e.category | lower | replace(' ','') | replace('/','') }}">{{ e.category_icon }} {{ e.category }}</span></td>
+          <td class="sender-cell">{{ e.sender[:30] }}</td>
+          <td class="subject-cell">{{ e.subject[:60] }}</td>
+          <td><span class="risk-badge risk-{{ e.risk_level | lower }}">{{ e.risk_level }}</span></td>
+          <td>
+            <div class="conf-wrap">
+              <div class="conf-bar"><div class="conf-fill" style="width:{{ e.confidence }}%"></div></div>
+              <span class="conf-num">{{ e.confidence }}%</span>
+            </div>
+          </td>
+          <td class="time-cell">{{ e.received_at.strftime('%b %d, %H:%M') if e.received_at else '' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if not emails %}
+    <div class="empty-state">
+      <div class="empty-icon">📬</div>
+      <p>No emails analyzed yet. New emails will appear here automatically.</p>
+    </div>
+    {% endif %}
+  </div>
+</main>
+
+<!-- Detail Modal -->
+<div id="modal-overlay" class="modal-overlay" onclick="closeModal()">
+  <div class="modal glass" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<!-- AI Chat Widget -->
+<button id="ai-chat-btn" class="ai-chat-btn" onclick="toggleChat()">✨ Ask AI</button>
+<div id="ai-chat-window" class="ai-chat-window glass">
+  <div class="ai-chat-header">
+    <h3>✨ MailGuard Assistant</h3>
+    <button onclick="toggleChat()">✕</button>
+  </div>
+  <div class="ai-chat-messages" id="ai-chat-messages">
+    <div class="ai-message">Hello! I'm your MailGuard AI assistant. Ask me anything about your inbox.</div>
+  </div>
+  <div class="ai-chat-input-area">
+    <input type="text" id="ai-chat-input" placeholder="e.g. Do I have any spam?" onkeypress="handleChatKeyPress(event)">
+    <button onclick="sendChatMessage()">Send</button>
+  </div>
+</div>
+
+<script>
+  window.INITIAL_STATS = {{ stats | tojson | safe }};
+  window.INITIAL_RISK_STATS = {{ risk_stats | tojson | safe }};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js" defer></script>
+<script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+</body>
+</html>

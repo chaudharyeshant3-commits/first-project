@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy Policy - MailGuard{% endblock %}
+
+{% block content %}
+<div class="page-container glass">
+    <h1 class="page-title">Privacy Policy</h1>
+    <div class="page-content">
+        <p><strong>Effective Date:</strong> Today</p>
+        
+        <h2 class="page-sec-title">1. Information We Collect</h2>
+        <p>When you use MailGuard, we request minimal, secure access to your inbox via Google's OAuth 2.0 protocol. We only require reading capabilities to scan the messages. We do NOT store your passwords, and we do NOT have write permission to delete or send emails on your behalf.</p>
+        
+        <h2 class="page-sec-title">2. How We Process Data</h2>
+        <p>Your incoming email snippets and structural data are temporarily streamed to our secure analytics engine for threat detection. Discovered spam, malware contexts, and risk-scores are stored strictly locally in your private database (SQLite) for dashboard presentation.</p>
+
+        <h2 class="page-sec-title">3. Artificial Intelligence</h2>
+        <p>MailGuard utilizes automated analysis. To enhance privacy, any PII (Personally Identifiable Information) detected is sanitized locally before passing broader sentence structures to external LLMs if remote processing is toggled.</p>
+        
+        <h2 class="page-sec-title">4. Third-Party Sharing</h2>
+        <p>We absolutely do not sell, rent, or trade your email information, sender data, or usage metrics with any marketing or third-party agencies. Your inbox metadata is completely yours.</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>{% block title %}MailGuard{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+{% block extra_head %}{% endblock %}
+</head>
+<body class="site-body">
+    
+    <nav class="site-nav glass">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                <span class="logo-icon-sm">🛡️</span>
+                <span class="logo-text-sm">MailGuard</span>
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/privacy" class="nav-link">Privacy</a>
+                <a href="/dashboard" class="nav-cta">Go to Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="site-main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2024 MailGuard Intelligence. Advanced email threat protection.</p>
+        </div>
+    </footer>
+</body>
+</html>

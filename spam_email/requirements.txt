@@ -1,0 +1,8 @@
+Flask
+Flask-SocketIO
+google-auth
+google-auth-oauthlib
+google-api-python-client
+Flask-SQLAlchemy
+eventlet
+python-dotenv

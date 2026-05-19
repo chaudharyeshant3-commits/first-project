@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Connect Your Gmail - MailGuard{% endblock %}
+
+{% block content %}
+  <div class="particles" id="particles"></div>
+
+  <div class="login-wrap">
+    <!-- Logo -->
+    <div class="login-logo">
+      <div class="logo-icon">🛡️</div>
+      <h1 class="logo-text">MailGuard</h1>
+      <p class="logo-sub">AI-Powered Email Intelligence</p>
+    </div>
+
+    <!-- Card -->
+    <div class="login-card glass">
+      {% if creds_missing %}
+      <div class="alert-banner warn">
+        ⚠️ <strong>credentials.json not found!</strong> Follow the setup steps below first.
+      </div>
+      {% endif %}
+      {% if request.args.get('error') %}
+      <div class="alert-banner warn" style="background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.3); color: #fca5a5;">
+        ⚠️ <strong>OAuth Error:</strong> {{ request.args.get('error') }}
+      </div>
+      {% endif %}
+
+      <h2 class="card-title">Protect your inbox</h2>
+      <p class="card-desc">Connect your Gmail account and get real-time analysis of every incoming email — spam, phishing, viruses, marketing and more.</p>
+
+      <a href="/connect" id="btn-connect" class="btn-google {% if creds_missing %}btn-disabled{% endif %}">
+        <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 33.1 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 2.9l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-9 20-20 0-1.4-.1-2.7-.4-4z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.1 18.9 12 24 12c3.1 0 5.8 1.1 8 2.9l5.7-5.7C34.1 6.5 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-1.9 13.5-5l-6.2-5.2C29.5 35.5 26.9 36 24 36c-5.2 0-9.6-2.9-11.3-7.1l-6.6 5.1C9.8 39.8 16.4 44 24 44z"/><path fill="#1976D2" d="M43.6 20H24v8h11.3c-.9 2.4-2.5 4.4-4.5 5.8l6.2 5.2C40.7 35.5 44 30.2 44 24c0-1.4-.1-2.7-.4-4z"/></svg>
+        Connect with Gmail
+      </a>
+
+      <!-- Features -->
+      <div class="features-grid">
+        <div class="feat">🚫<span>Spam Detection</span></div>
+        <div class="feat">🦠<span>Virus & Malware</span></div>
+        <div class="feat">🎣<span>Phishing Alerts</span></div>
+        <div class="feat">📢<span>Marketing Filter</span></div>
+        <div class="feat">🔔<span>Live Notifications</span></div>
+        <div class="feat">📊<span>Dashboard Stats</span></div>
+      </div>
+    </div>
+
+    <!-- Setup Guide -->
+    <div class="setup-guide glass">
+      <h3>⚙️ One-Time Google Cloud Setup</h3>
+      <ol>
+        <li>Go to <a href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a></li>
+        <li>Create a new project (e.g. <em>MailGuard</em>)</li>
+        <li>Enable <strong>Gmail API</strong> from API Library</li>
+        <li>Go to <strong>APIs &amp; Services → Credentials</strong></li>
+        <li>Create <strong>OAuth 2.0 Client ID</strong> → Web Application</li>
+        <li>Add redirect URI: <code>http://localhost:5000/oauth2callback</code></li>
+        <li>Download JSON → rename to <code>credentials.json</code> → place in project folder</li>
+        <li>Restart the server and click <em>Connect with Gmail</em>!</li>
+      </ol>
+    </div>
+  </div>
+
+<script>
+// Animated floating particles
+const container = document.getElementById('particles');
+if (container) {
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;
+      width:${2+Math.random()*4}px;height:${2+Math.random()*4}px;
+      animation-delay:${Math.random()*8}s;animation-duration:${6+Math.random()*6}s;
+      opacity:${0.2+Math.random()*0.5}`;
+    container.appendChild(p);
+  }
+}
+</script>
+{% endblock %}

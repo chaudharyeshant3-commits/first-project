@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}MailGuard - AI Email Protection{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-content text-center">
+        <div class="hero-badge">Next-Gen Threat Detection</div>
+        <h1 class="hero-title">Protect your inbox with AI</h1>
+        <p class="hero-subtitle">
+            MailGuard actively monitors your incoming emails, instantly detecting phishing attacks, malware, and spam before they ever become a threat. Fully automated intelligence for your safety.
+        </p>
+        <div class="hero-actions">
+            <a href="/dashboard" class="btn-primary-large">Protect My Inbox</a>
+            <a href="/about" class="btn-secondary-large">Learn More</a>
+        </div>
+    </div>
+    <div class="hero-visual">
+        <div class="glass visual-card">
+            <div class="visual-header">Live Threat Analysis <span class="live-dot pulse"></span></div>
+            <div class="visual-metrics">
+                <div class="metric"><span class="metric-val">99.9%</span><span class="metric-lbl">Accuracy</span></div>
+                <div class="metric"><span class="metric-val">0.2s</span><span class="metric-lbl">Scan Time</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features-section container">
+    <h2 class="section-title text-center">The Next Generation of Email Security</h2>
+    <div class="feature-grid">
+         <div class="feature-card glass">
+             <div class="feature-icon bg-red">🚫</div>
+             <h3>Spam & Malware Filtering</h3>
+             <p>Our deep learning models catch complicated zero-day malicious files and perfectly obfuscated scripts effortlessly.</p>
+         </div>
+         <div class="feature-card glass">
+             <div class="feature-icon bg-orange">🎣</div>
+             <h3>Anti-Phishing Shield</h3>
+             <p>Detects dangerous social engineering, intent to steal data, and disguised sender domains that traditional filters miss.</p>
+         </div>
+         <div class="feature-card glass">
+             <div class="feature-icon bg-blue">⚡</div>
+             <h3>Real-Time Notifications</h3>
+             <p>Instantly highlights threats in a dynamic dashboard allowing you to triage dangerous emails securely and visually.</p>
+         </div>
+    </div>
+</section>
+
+{% endblock %}
