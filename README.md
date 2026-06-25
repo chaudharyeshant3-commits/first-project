@@ -1,2 +1,3 @@
-# first-project
-# new-project
+# spam-email
+
+A spam email analysis project using Gmail and AI services.
